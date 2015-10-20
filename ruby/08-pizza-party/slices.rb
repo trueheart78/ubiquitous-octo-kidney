@@ -6,9 +6,9 @@ class PizzaParty < Gosu::Window
   def initialize
     @pizza_pic = Gosu::Image.new('party.jpg')
     super @pizza_pic.width, @pizza_pic.height + 100
-    self.caption = "Pizza Party!"
+    self.caption = "Pizza Party - Special Slices Edition!"
 
-    @font = Gosu::Font.new(30)
+    @font = Gosu::Font.new(24)
     @people = 4
     @slices = 2
   end
