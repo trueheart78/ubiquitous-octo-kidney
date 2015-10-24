@@ -9,7 +9,7 @@ class CurrencyConversion < Gosu::Window
     @money_pic = Gosu::Image.new('usd.jpg')
     super 600, 480
     self.caption = "Intermediate Currency Conversion"
-    @font = Gosu::Font.new(30)
+    @font = Gosu::Font.new(24)
     @from_amount = 81
     @from_currency = :euro
     @to_currency = :dollar
@@ -23,8 +23,16 @@ class CurrencyConversion < Gosu::Window
       @euro_coin.draw(1,100,2,0.25,0.25)
       @dollar_bill.draw(200,100,2,0.15,0.15)
 
-      @font.draw("[E]uros",30,240,2)
-      @font.draw("[U]S Dollars",260,240,2)
+      message = "[E]uros"
+      if @from_currency == :euro
+        message = "<c=ffff00>#{message}</c>"
+      end
+      @font.draw(message,30,240,2)
+      message = "[U]S Dollars"
+      if @from_currency == :dollar
+        message = "<c=ffff00>#{message}</c>"
+      end
+      @font.draw(message,260,240,2)
 
       @font.draw("[N]ext: Enter Currency", 20, 400, 1)
       @font.draw("[Q]uit", 20, 420, 1)

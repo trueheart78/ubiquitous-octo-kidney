@@ -8,7 +8,7 @@ class PizzaParty < Gosu::Window
     super @pizza_pic.width, @pizza_pic.height + 100
     self.caption = "Pizza Party!"
 
-    @font = Gosu::Font.new(30)
+    @font = Gosu::Font.new(24)
     @pizza = 1
     @people = 4
   end

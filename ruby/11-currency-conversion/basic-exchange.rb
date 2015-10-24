@@ -7,7 +7,7 @@ class CurrencyConversion < Gosu::Window
     @money_pic = Gosu::Image.new('usd.jpg')
     super @money_pic.width, @money_pic.height + 100
     self.caption = "Basic Currency Conversion"
-    @font = Gosu::Font.new(30)
+    @font = Gosu::Font.new(24)
     @euros = 81
     @rate = 137.51
     @state = :euros
@@ -28,9 +28,8 @@ class CurrencyConversion < Gosu::Window
       rate_message = "Exchange rate? #{@rate}"
     end
     @font.draw(rate_message, 20, 20, 2)
-    @font.draw(@state.to_s, 20, 90, 2)
     
-    @font.draw("#{usd} U.S. dollars", 20, 50, 2)
+    @font.draw("#{usd} U.S. dollars", 20, 60, 2)
   end
 
   def update
