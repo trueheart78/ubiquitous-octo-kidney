@@ -3,7 +3,7 @@ class Player
   attr_accessor :name, :weight, :height, :picture
 
   def initialize
-    @name = "Player One"
+    @name = "Matrix Cat"
     @height = 6 * 12
     @weight = 176
     @picture = Gosu::Image.new("pics/matrix-business-cat.png")

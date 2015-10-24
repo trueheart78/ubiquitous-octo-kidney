@@ -6,7 +6,7 @@ require_relative 'doctor'
 class BmiCalculator < Gosu::Window
 
   def initialize
-    super 600, 400
+    super 500, 450
     self.caption = "BMI Cat Doctor"
 
     @player = Player.new
@@ -19,7 +19,7 @@ class BmiCalculator < Gosu::Window
   def draw
     @player.picture.draw(0,0,1,0.25,0.25)
 
-    @font.draw(@player.name, 220, 0, 99)
+    @font.draw("Name: #{@player.name}", 220, 0, 99)
 
     color = (@state == :height) ? :highlight : :normal
     question = "Height: <c=#{@colors[color]}>#{@player.height} inches</c>"
@@ -29,25 +29,26 @@ class BmiCalculator < Gosu::Window
     question = "Weight: <c=#{@colors[color]}>#{@player.weight} lbs</c>"
     @font.draw(question, 220, 40, 99)
 
-    @font.draw("#{@player}", 20, 350, 99)
 
     if @state == :advice or @state == :doctor
-      @doctor.picture.draw(200,150,2,0.22,0.22)
-      @font.draw(@doctor, 20, 70, 99)
+      @doctor.picture.draw(302,220,2,0.22,0.22)
+      @font.draw("\"#{@doctor}\"", 50, 220, 99)
 
+      color = (@state == :advice) ? :highlight : :normal
+      @font.draw("<c=#{@colors[color]}>Ask: \"Am I too fluffy?\"</c>", 50, 260, 99)
       if @state == :doctor
-        advice = "You are #{@doctor.advice(@player.bmi)}"
-        @font.draw(advice, 20, 90, 99)
-      else
-        @font.draw("<c=#{@colors[:highlight]}>[icanhascheezburger?]</c>", 20, 90, 99)
+        @font.draw("\"#{@doctor.advice(@player.bmi)}\"", 50, 300, 99)
       end
     else
+      if @visited_doctor
+        @font.draw("\"Come back soon!\"", 50, 220, 99)
+      end
       color = (@state == :proceed) ? :highlight : :normal
-      @font.draw("<c=#{@colors[color]}>[Visit #{@doctor.name}]</c>", 220, 90, 99)
+      @font.draw("<c=#{@colors[color]}>[Visit #{@doctor.name}#{(@visited_doctor)?" Again!":""}]</c>", 220, 90, 99)
     end
 
-    @font.draw("State: #{@state}", 20, 330, 99)
-#   @font.draw("Time: #{self.milliseconds}", 20, 350, 99)
+    @font.draw("<c=606060>State: #{@state}</c>", 20, 400, 99)
+    @font.draw("<c=606060>#{@player}</c>", 20, 425, 99)
   end
 
   def update
@@ -70,6 +71,7 @@ class BmiCalculator < Gosu::Window
       confirm  { @state = :doctor }
     when :doctor
       backward { @state = :weight }
+      @visited_doctor = true
     end
   end
 
@@ -119,19 +121,19 @@ class BmiCalculator < Gosu::Window
   end
 
   def increase?
-    button_down? Gosu::KbRight or button_down? Gosu::GpRight
+    button_down? Gosu::KbRight or button_down? Gosu::GpRight or button_down? Gosu::KbL
   end
 
   def decrease?
-    button_down? Gosu::KbLeft or button_down? Gosu::GpLeft
+    button_down? Gosu::KbLeft or button_down? Gosu::GpLeft or button_down? Gosu::KbH
   end
 
   def previous?
-    button_down? Gosu::KbUp or button_down? Gosu::GpUp
+    button_down? Gosu::KbUp or button_down? Gosu::GpUp or button_down? Gosu::KbK
   end
 
   def next?
-    button_down? Gosu::KbDown or button_down? Gosu::GpDown
+    button_down? Gosu::KbDown or button_down? Gosu::GpDown or button_down? Gosu::KbJ
   end
 
   def confirm?
@@ -141,7 +143,7 @@ class BmiCalculator < Gosu::Window
   def exit?
     button_down? Gosu::KbEscape \
       or button_down? Gosu::KbQ \
-      or button_down? Gosu::GpButton1
+      or button_down? Gosu::GpButton3
   end
 end
 
