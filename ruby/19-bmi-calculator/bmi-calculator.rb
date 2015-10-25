@@ -41,7 +41,7 @@ class BmiCalculator < Gosu::Window
       if @state == :doctor
         @font.draw("\"#{@doctor.advice(@player.bmi)}\"", 50, 300, 99)
       end
-    else
+    elsif @state == :proceed
       if @visited_doctor
         @font.draw("\"Come back soon!\"", 50, 220, 99)
       end
@@ -60,19 +60,20 @@ class BmiCalculator < Gosu::Window
       on_increase { @player.height += 1 }
       on_decrease { @player.height -= 1 if @player.height > 36 }
       on_forward  { @state = :weight }
+      on_confirm  { @state = :proceed }
     when :weight
       on_increase { @player.weight += 1 if @player.weight < 999 }
       on_decrease { @player.weight -= 1 if @player.weight > 75 }
       on_backward { @state = :height }
-      on_forward  { @state = :proceed }
+      on_confirm  { @state = :proceed }
     when :proceed
-      on_backward { @state = :weight }
+      on_cancel   { @state = :weight }
       on_confirm  { @state = :advice }
     when :advice
-      on_backward { @state = :weight }
+      on_cancel   { @state = :weight }
       on_confirm  { @state = :doctor }
     when :doctor
-      on_backward { @state = :weight }
+      on_cancel   { @state = :height }
       @visited_doctor = true
     end
   end

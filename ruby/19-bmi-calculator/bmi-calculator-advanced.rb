@@ -25,7 +25,7 @@ class BmiCalculator < Gosu::Window
     @font.draw("Name: #{@player.name}", 220, 0, 99)
 
     color = (@state == :type) ? :highlight : :normal
-    question = "Units: <c=#{@colors[color]}>#{@player.units}</c>"
+    question = "Units: <c=#{@colors[color]}>#{@player.display_units}</c>"
     @font.draw(question, 220, 20, 99)
 
     color = (@state == :height) ? :highlight : :normal
@@ -33,7 +33,7 @@ class BmiCalculator < Gosu::Window
     @font.draw(question, 220, 40, 99)
 
     color = (@state == :weight) ? :highlight : :normal
-    question = "Weight: <c=#{@colors[color]}>#{@player.weight} lbs</c>"
+    question = "Weight: <c=#{@colors[color]}>#{@player.display_weight}</c>"
     @font.draw(question, 220, 60, 99)
 
     if @state == :advice or @state == :doctor
@@ -45,7 +45,7 @@ class BmiCalculator < Gosu::Window
       if @state == :doctor
         @font.draw("\"#{@doctor.advice(@player.bmi)}\"", 50, 300, 99)
       end
-    else
+    elsif @state == :proceed
       if @visited_doctor
         @font.draw("\"Come back soon!\"", 50, 220, 99)
       end
@@ -64,24 +64,26 @@ class BmiCalculator < Gosu::Window
       on_increase { @player.change_type }
       on_decrease { @player.change_type }
       on_forward  { @state = :height }
+      on_confirm  { @state = :proceed }
     when :height
       on_increase { @player.height += 1 }
       on_decrease { @player.height -= 1 if @player.height > 36 }
       on_backward { @state = :type }
       on_forward  { @state = :weight }
+      on_confirm  { @state = :proceed }
     when :weight
       on_increase { @player.weight += 1 if @player.weight < 999 }
       on_decrease { @player.weight -= 1 if @player.weight > 75 }
       on_backward { @state = :height }
-      on_forward  { @state = :proceed }
+      on_confirm  { @state = :proceed }
     when :proceed
-      on_backward { @state = :weight }
+      on_cancel   { @state = :weight }
       on_confirm  { @state = :advice }
     when :advice
-      on_backward { @state = :weight }
+      on_cancel   { @state = :weight }
       on_confirm  { @state = :doctor }
     when :doctor
-      on_backward { @state = :weight }
+      on_cancel   { @state = :type   }
       @visited_doctor = true
     end
   end

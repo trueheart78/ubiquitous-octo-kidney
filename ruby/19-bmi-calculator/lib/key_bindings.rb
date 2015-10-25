@@ -45,6 +45,15 @@ module KeyBindings
     end
   end
 
+  def on_cancel &block
+    if !@canceling and cancel?
+      yield
+      @canceling = true
+    elsif @canceling and !cancel?
+      @canceling = false
+    end
+  end
+
   def increase?
     button_down? Gosu::KbRight or button_down? Gosu::GpRight or button_down? Gosu::KbL
   end
@@ -65,10 +74,12 @@ module KeyBindings
     button_down? Gosu::KbReturn or button_down? Gosu::GpButton0
   end
 
+  def cancel?
+    button_down? Gosu::KbEscape or button_down? Gosu::GpButton1
+  end
+
   def exit?
-    button_down? Gosu::KbEscape \
-      or button_down? Gosu::KbQ \
-      or button_down? Gosu::GpButton3
+    button_down? Gosu::KbQ or button_down? Gosu::GpButton3
   end
 
 end
