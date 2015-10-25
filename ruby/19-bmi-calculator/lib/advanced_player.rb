@@ -11,20 +11,16 @@ class AdvancedPlayer
   end
 
   def change_type
-    if units == :metric
-      @units = :imperial
-    else
-      @units = :metric
-    end
+    toggle_type
     convert_height
     convert_weight
   end
 
   def bmi
-    if units == :imperial
+    if imperial?
       ((weight.to_f / height.to_f**2) * 703).round(1)
     else
-      (weight.to_f / height.to_f**2).round(1)
+      (weight.to_f / height_in_meters**2).round(1)
     end
   end
 
@@ -37,7 +33,7 @@ class AdvancedPlayer
   end
 
   def display_height
-    if units == :imperial
+    if imperial?
       return "#{feet}'" unless inches > 0
       "#{feet}' #{inches}\""
     else
@@ -51,18 +47,39 @@ class AdvancedPlayer
 
   private
 
+  def metric?
+    units == :metric
+  end
+
+  def imperial?
+    units == :imperial
+  end
+
+  def height_in_meters
+    return 0 if metric?
+    height.to_f / 100.0
+  end
+
+  def toggle_type
+    if metric?
+      @units = :imperial
+    else
+      @units = :metric
+    end
+  end
+
   def convert_height
     #convert from imperial
-    @height = (@height * 2.54).to_i if units == :metric
+    @height = (@height * 2.54).to_i if metric?
     #convert from metric
-    @height = (@height * 0.394).to_i if units == :imperial
+    @height = (@height * 0.394).to_i if imperial?
   end
 
   def convert_weight
     #convert from imperial
-    @weight = (@weight * 0.454).to_i if units == :metric
+    @weight = (@weight * 0.454).to_i if metric?
     #convert from metric
-    @weight = (@weight * 2.205).to_i if units == :imperial
+    @weight = (@weight * 2.205).to_i if imperial?
   end
 
   def feet
@@ -74,12 +91,12 @@ class AdvancedPlayer
   end
 
   def length_label
-    return "cm" if units == :metric
+    return "cm" if metric?
     "inches"
   end
 
   def weight_label
-    return "kg" if units == :metric
+    return "kg" if metric?
     "lb"
   end
 
