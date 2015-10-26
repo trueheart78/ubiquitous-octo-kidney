@@ -56,7 +56,7 @@ class AdvancedPlayer
   end
 
   def height_in_meters
-    return 0 if metric?
+    return 0 unless metric?
     height.to_f / 100.0
   end
 
