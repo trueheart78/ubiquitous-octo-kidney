@@ -14,7 +14,7 @@ class Player
   end
 
   def to_s
-    "#{name} is #{display_height} and weighs #{weight} lbs (BMI: #{bmi})"
+    "#{name} is #{display_height} and #{weight} lbs (BMI: #{bmi})"
   end
 
   private
