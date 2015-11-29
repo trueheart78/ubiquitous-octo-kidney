@@ -2,11 +2,11 @@ require_relative 'password'
 
 RSpec.describe Password do
 
-  describe "#check_strength" do
+  describe "password strength" do
 
     it "is less than 8 characters" do
       password = Password.new("abc123")
-      expect(password.check_strength).to eq(:weak)
+      expect(password).to be_weak
     end
 
     it "is only numbers" do
