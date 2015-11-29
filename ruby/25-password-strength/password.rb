@@ -10,8 +10,6 @@ class Password
     :very_strong if very_strong?
   end
 
-  private
-
   def weak?
     too_short? || all_numbers? || all_letters?
   end
@@ -23,6 +21,8 @@ class Password
   def very_strong?
     !weak? && has_symbols?
   end
+
+  private
 
   def too_short?
     @password.length < 8
